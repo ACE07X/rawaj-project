@@ -7,12 +7,16 @@ import {
     LogOut, Home, Building2, Users, Settings, PlusCircle,
     Trash2, Edit, MapPin, DollarSign, LayoutGrid, X, Loader2, Code2, Upload, Image as ImageIcon, CheckCircle, Smartphone
 } from 'lucide-react';
+import AdminUsers from './AdminUsers';
+import AdminSettings from './AdminSettings';
 
 const Admin = () => {
     const { logout } = useAdminAuth();
     const { properties, fetchProperties, loading } = useProperties();
     const navigate = useNavigate();
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showUsersModal, setShowUsersModal] = useState(false);
+    const [showSettingsModal, setShowSettingsModal] = useState(false);
 
     // New Property State
     const [newProperty, setNewProperty] = useState({
@@ -144,13 +148,18 @@ const Admin = () => {
                     <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-500/10 text-primary-400 font-medium cursor-pointer">
                         <LayoutGrid className="w-5 h-5" /> Dashboard
                     </div>
-                    {/* Placeholder links */}
-                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/5 transition-colors cursor-not-allowed opacity-50">
+                    <button
+                        onClick={() => setShowUsersModal(true)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-colors"
+                    >
                         <Users className="w-5 h-5" /> Users
-                    </div>
-                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/5 transition-colors cursor-not-allowed opacity-50">
+                    </button>
+                    <button
+                        onClick={() => setShowSettingsModal(true)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-colors"
+                    >
                         <Settings className="w-5 h-5" /> Settings
-                    </div>
+                    </button>
                 </nav>
 
                 {/* SoulTech Branding */}
@@ -234,8 +243,8 @@ const Admin = () => {
                                                 <td className="px-6 py-4 text-slate-300 capitalize">{property.type}</td>
                                                 <td className="px-6 py-4">
                                                     <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${property.status === 'sold' ? 'bg-red-500/20 text-red-400' :
-                                                            property.status === 'reserved' ? 'bg-orange-500/20 text-orange-400' :
-                                                                'bg-green-500/20 text-green-400'
+                                                        property.status === 'reserved' ? 'bg-orange-500/20 text-orange-400' :
+                                                            'bg-green-500/20 text-green-400'
                                                         }`}>
                                                         {property.status}
                                                     </span>
@@ -353,6 +362,16 @@ const Admin = () => {
                         </form>
                     </div>
                 </div>
+            )}
+
+            {/* Users Modal */}
+            {showUsersModal && (
+                <AdminUsers onClose={() => setShowUsersModal(false)} />
+            )}
+
+            {/* Settings Modal */}
+            {showSettingsModal && (
+                <AdminSettings onClose={() => setShowSettingsModal(false)} />
             )}
         </div>
     );
