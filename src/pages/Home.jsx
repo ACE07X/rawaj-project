@@ -150,15 +150,25 @@ const Home = () => {
                                     className="glass-card group rounded-2xl overflow-hidden flex flex-col h-full hover:-translate-y-2 transition-transform duration-300"
                                 >
                                     <div className="relative h-64 overflow-hidden">
-                                        <div className="absolute top-4 right-4 z-20 bg-slate-900/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-white border border-white/10">
-                                            {property.type === 'sale'
-                                                ? (lang === 'ar' ? 'للبيع' : 'For Sale')
-                                                : (lang === 'ar' ? 'للإيجار' : 'For Rent')}
+                                        <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
+                                            {/* Status Badge */}
+                                            {property.status && property.status !== 'available' ? (
+                                                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg ${property.status === 'sold' ? 'bg-red-600 text-white' : 'bg-orange-500 text-white'
+                                                    }`}>
+                                                    {property.status === 'sold' ? (lang === 'ar' ? 'تم البيع' : 'Sold') : (lang === 'ar' ? 'محجوز' : 'Reserved')}
+                                                </span>
+                                            ) : (
+                                                <span className="px-3 py-1 rounded-full text-xs font-semibold text-white border border-white/10 bg-slate-900/80 backdrop-blur-sm">
+                                                    {property.type === 'sale'
+                                                        ? (lang === 'ar' ? 'للبيع' : 'For Sale')
+                                                        : (lang === 'ar' ? 'للإيجار' : 'For Rent')}
+                                                </span>
+                                            )}
                                         </div>
                                         <img
                                             src={property.image_url || 'https://images.unsplash.com/photo-1600596542815-60c37c65b567?q=80&w=800&auto=format&fit=crop'}
                                             alt={property.title}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                            className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ${property.status === 'sold' ? 'grayscale' : ''}`}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                                     </div>

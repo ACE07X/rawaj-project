@@ -1,7 +1,10 @@
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { AdminAuthProvider } from './context/AdminAuthContext';
+import { UserAuthProvider } from './context/UserAuthContext';
 import { PropertiesProvider } from './context/PropertiesContext';
+
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -11,48 +14,45 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import PrivacyPolicy from './pages/PrivacyPolicy';
-import ConsentBanner from './components/ConsentBanner';
 import ProtectedRoute from './ProtectedRoute';
-
-const Layout = ({ children, showHeaderFooter = true }) => {
-    return (
-        <>
-            {showHeaderFooter && <Header />}
-            {children}
-            {showHeaderFooter && <Footer />}
-            <ConsentBanner />
-        </>
-    );
-};
+import ConsentBanner from './components/ConsentBanner';
 
 function App() {
     return (
-        <HashRouter>
-            <LanguageProvider>
+        <LanguageProvider>
+            <UserAuthProvider>
                 <AdminAuthProvider>
                     <PropertiesProvider>
-                        <div className="min-h-screen bg-slate-900 text-white">
-                            <Routes>
-                                {/* Public Routes */}
-                                <Route path="/" element={<Layout><Home /></Layout>} />
-                                <Route path="/properties" element={<Layout><Properties /></Layout>} />
-                                <Route path="/properties/:id" element={<Layout><PropertyDetails /></Layout>} />
-                                <Route path="/about" element={<Layout><About /></Layout>} />
-                                <Route path="/contact" element={<Layout><Contact /></Layout>} />
-                                <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
-                                <Route path="/login" element={<Layout showHeaderFooter={false}><Login /></Layout>} />
+                        <HashRouter>
+                            <div className="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-white min-h-screen flex flex-col">
+                                <Header />
+                                <main className="flex-grow">
+                                    <Routes>
+                                        <Route path="/" element={<Home />} />
+                                        <Route path="/properties" element={<Properties />} />
+                                        <Route path="/properties/:id" element={<PropertyDetails />} />
+                                        <Route path="/about" element={<About />} />
+                                        <Route path="/contact" element={<Contact />} />
+                                        <Route path="/login" element={<Login />} />
+                                        <Route path="/signup" element={<Signup />} />
+                                        <Route path="/privacy" element={<PrivacyPolicy />} />
 
-                                {/* Protected Admin Route - wrapped with ProtectedRoute */}
-                                <Route element={<ProtectedRoute />}>
-                                    <Route path="/admin" element={<Layout showHeaderFooter={false}><Admin /></Layout>} />
-                                </Route>
-                            </Routes>
-                        </div>
+                                        {/* Protected Admin Routes */}
+                                        <Route element={<ProtectedRoute />}>
+                                            <Route path="/admin" element={<Admin />} />
+                                        </Route>
+                                    </Routes>
+                                </main>
+                                <Footer />
+                                <ConsentBanner />
+                            </div>
+                        </HashRouter>
                     </PropertiesProvider>
                 </AdminAuthProvider>
-            </LanguageProvider>
-        </HashRouter>
+            </UserAuthProvider>
+        </LanguageProvider>
     );
 }
 
