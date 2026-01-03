@@ -11,6 +11,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import ConsentBanner from './components/ConsentBanner';
 import ProtectedRoute from './ProtectedRoute';
 
 const Layout = ({ children, showHeaderFooter = true }) => {
@@ -19,6 +21,7 @@ const Layout = ({ children, showHeaderFooter = true }) => {
             {showHeaderFooter && <Header />}
             {children}
             {showHeaderFooter && <Footer />}
+            <ConsentBanner />
         </>
     );
 };
@@ -37,6 +40,7 @@ function App() {
                                 <Route path="/properties/:id" element={<Layout><PropertyDetails /></Layout>} />
                                 <Route path="/about" element={<Layout><About /></Layout>} />
                                 <Route path="/contact" element={<Layout><Contact /></Layout>} />
+                                <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
                                 <Route path="/login" element={<Layout showHeaderFooter={false}><Login /></Layout>} />
 
                                 {/* Protected Admin Route - wrapped with ProtectedRoute */}
