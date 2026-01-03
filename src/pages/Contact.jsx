@@ -5,22 +5,18 @@ import { MapPin, Phone, Mail, Clock, Globe } from 'lucide-react';
 const Contact = () => {
     const { t, lang } = useLanguage();
 
-    const founders = [
+    const supportChannels = [
         {
-            name_en: "Amir Ahmed Alshanfari",
-            name_ar: "عامر أحمد الشنفري",
-            title_en: "Founder & CEO",
-            title_ar: "المؤسس والرئيس التنفيذي",
+            label_en: "Primary Support",
+            label_ar: "الدعم المباشر",
             phone: "+968 9949 3888",
             link: "https://wa.me/96899493888"
         },
         {
-            name_en: "Partner / Co-Founder",
-            name_ar: "الشريك والمؤسس",
-            title_en: "Co-Founder",
-            title_ar: "شريك مؤسس",
+            label_en: "Sales Support",
+            label_ar: "دعم المبيعات",
             phone: "+968 9320 6066",
-            link: "https://wa.me/96893206066"
+            link: "https://wa.me/93206066"
         }
     ];
 
@@ -81,27 +77,28 @@ const Contact = () => {
                         </div>
                     </div>
 
-                    {/* Founders Section */}
+                    {/* Support Channels Section */}
                     <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {founders.map((founder, idx) => (
-                            <div key={idx} className="glass-card p-8 rounded-2xl border border-white/5 hover:border-primary-500/30 transition-all group relative overflow-hidden">
+                        {supportChannels.map((channel, idx) => (
+                            <div key={idx} className="glass-card p-10 rounded-2xl border border-white/5 hover:border-primary-500/30 transition-all group relative overflow-hidden">
                                 <div className="absolute top-0 right-0 p-32 bg-primary-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-primary-500/10 transition-colors" />
 
-                                <h3 className="text-2xl font-bold text-white mb-1 relatives z-10">
-                                    {lang === 'ar' ? founder.name_ar : founder.name_en}
+                                <h3 className="text-2xl font-bold text-white mb-6 relative z-10">
+                                    {lang === 'ar' ? channel.label_ar : channel.label_en}
                                 </h3>
-                                <p className="text-primary-400 font-medium mb-6 uppercase tracking-wider text-sm">
-                                    {lang === 'ar' ? founder.title_ar : founder.title_en}
-                                </p>
 
-                                <div className="flex flex-col gap-3">
-                                    <a href={`tel:${founder.phone.replace(/\s/g, '')}`} className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors bg-white/5 p-4 rounded-xl hover:bg-white/10">
-                                        <Phone className="w-5 h-5 text-primary-500" />
-                                        <span className="font-bold text-lg dir-ltr">{founder.phone}</span>
+                                <div className="flex flex-col gap-4 relative z-10">
+                                    <a href={`tel:${channel.phone.replace(/\s/g, '')}`} className="flex items-center gap-4 text-slate-300 hover:text-white transition-colors bg-white/5 p-5 rounded-xl hover:bg-white/10 border border-white/5">
+                                        <div className="p-3 rounded-lg bg-primary-500/20 text-primary-400">
+                                            <Phone className="w-6 h-6" />
+                                        </div>
+                                        <span className="font-bold text-xl dir-ltr">{channel.phone}</span>
                                     </a>
-                                    <a href={founder.link} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors bg-green-500/10 p-4 rounded-xl hover:bg-green-500/20 border border-green-500/20">
-                                        <Globe className="w-5 h-5 text-green-500" />
-                                        <span className="font-medium">{lang === 'ar' ? 'تواصل عبر واتساب' : 'Chat on WhatsApp'}</span>
+                                    <a href={channel.link} target="_blank" rel="noreferrer" className="flex items-center gap-4 text-slate-300 hover:text-white transition-colors bg-green-500/10 p-5 rounded-xl hover:bg-green-500/20 border border-green-500/20">
+                                        <div className="p-3 rounded-lg bg-green-500/20 text-green-400">
+                                            <Globe className="w-6 h-6" />
+                                        </div>
+                                        <span className="font-bold text-lg">{lang === 'ar' ? 'تواصل عبر واتساب' : 'WhatsApp Chat'}</span>
                                     </a>
                                 </div>
                             </div>

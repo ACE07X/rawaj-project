@@ -129,7 +129,7 @@ const AdminSettings = ({ onClose }) => {
                                 </h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-1">
-                                        <label className="text-xs text-slate-500">Primary Phone (Founder & CEO)</label>
+                                        <label className="text-xs text-slate-500">Primary Contact Number</label>
                                         <input
                                             type="tel"
                                             value={settings.phone_primary}
@@ -138,7 +138,7 @@ const AdminSettings = ({ onClose }) => {
                                         />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-xs text-slate-500">Secondary Phone (Co-Founder)</label>
+                                        <label className="text-xs text-slate-500">Secondary Contact Number</label>
                                         <input
                                             type="tel"
                                             value={settings.phone_secondary}

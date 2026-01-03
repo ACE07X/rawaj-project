@@ -70,20 +70,20 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                {/* Contact Info (Founders Separated) */}
+                {/* Contact Info */}
                 <div>
-                    <h4 className="text-white font-bold text-lg mb-6 font-serif border-b border-accent-500/30 pb-2 inline-block">
-                        {lang === 'ar' ? 'اتصل بالمؤسسين' : 'Contact Founders'}
+                    <h4 className="text-white font-bold text-lg mb-6 font-serif border-b border-primary-500/30 pb-2 inline-block">
+                        {lang === 'ar' ? 'تواصل معنا' : 'Contact Us'}
                     </h4>
                     <div className="space-y-6">
-                        {/* Founder 1 */}
+                        {/* Support 1 */}
                         <div className="flex items-start gap-4 group">
-                            <div className="p-3 rounded-xl bg-white/5 group-hover:bg-primary-600/20 text-accent-400 transition-colors border border-white/5 shadow-lg">
+                            <div className="p-3 rounded-xl bg-white/5 group-hover:bg-primary-600/20 text-primary-400 transition-colors border border-white/5 shadow-lg">
                                 <Phone className="w-5 h-5" />
                             </div>
                             <div>
-                                <h5 className="text-accent-400 text-xs font-bold uppercase tracking-wider mb-1">
-                                    {lang === 'ar' ? 'المؤسس والرئيس التنفيذي' : 'Founder & CEO'}
+                                <h5 className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mb-1">
+                                    {lang === 'ar' ? 'الرقم المباشر' : 'Direct Line'}
                                 </h5>
                                 <a href="tel:99493888" className="text-white hover:text-primary-400 transition-colors font-bold tracking-widest dir-ltr text-lg block">
                                     +968 9949 3888
@@ -91,14 +91,14 @@ const Footer = () => {
                             </div>
                         </div>
 
-                        {/* Founder 2 */}
+                        {/* Support 2 */}
                         <div className="flex items-start gap-4 group">
-                            <div className="p-3 rounded-xl bg-white/5 group-hover:bg-primary-600/20 text-accent-400 transition-colors border border-white/5 shadow-lg">
+                            <div className="p-3 rounded-xl bg-white/5 group-hover:bg-primary-600/20 text-primary-400 transition-colors border border-white/5 shadow-lg">
                                 <Phone className="w-5 h-5" />
                             </div>
                             <div>
-                                <h5 className="text-accent-400 text-xs font-bold uppercase tracking-wider mb-1">
-                                    {lang === 'ar' ? 'شريك مؤسس' : 'Co-Founder'}
+                                <h5 className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mb-1">
+                                    {lang === 'ar' ? 'قسم المبيعات' : 'Sales Department'}
                                 </h5>
                                 <a href="tel:93206066" className="text-white hover:text-primary-400 transition-colors font-bold tracking-widest dir-ltr text-lg block">
                                     +968 9320 6066
@@ -124,7 +124,7 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8">
                     <span>&copy; {new Date().getFullYear()} {lang === 'ar' ? 'الروّاج للعقارات' : 'Al-Rawaj Real Estate'}</span>
                     <span className="hidden md:inline text-white/10">|</span>
-                    <span className="text-emerald-500 font-mono text-xs bg-emerald-500/10 px-2 py-0.5 rounded">v2.0 Enterprise</span>
+                    <span className="text-primary-500 font-mono text-xs bg-primary-500/10 px-2 py-0.5 rounded border border-primary-500/20">v2.1 Royal Enterprise</span>
                     <span className="hidden md:inline text-white/10">|</span>
                     <span className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">
                         Developed by <span className="text-white font-bold tracking-wide">SoulTech</span>

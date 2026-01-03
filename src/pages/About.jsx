@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { Award, Users, Target, TrendingUp, Phone, Mail } from 'lucide-react';
+import { Award, Users, Target, TrendingUp } from 'lucide-react';
 
 const About = () => {
     const { lang } = useLanguage();
@@ -59,27 +59,6 @@ const About = () => {
         }
     ];
 
-    const team = [
-        {
-            name_en: 'Amir Ahmed Alshanfari',
-            name_ar: 'عامر أحمد الشنفري',
-            role_en: 'Founder & CEO',
-            role_ar: 'المؤسس والرئيس التنفيذي',
-            phone: '+968 9949 3888',
-            bio_en: 'With over a decade of experience in Omani real estate, Amir leads Al-Rawaj with a vision for excellence and customer satisfaction.',
-            bio_ar: 'مع أكثر من عقد من الخبرة في العقارات العمانية، يقود عامر الرواج برؤية للتميز ورضا العملاء.'
-        },
-        {
-            name_en: 'Partner / Co-Founder',
-            name_ar: 'الشريك والمؤسس المشارك',
-            role_en: 'Co-Founder & Operations Director',
-            role_ar: 'المؤسس المشارك ومدير العمليات',
-            phone: '+968 9320 6066',
-            bio_en: 'Dedicated to operational excellence and strategic growth in the Dhofar real estate market.',
-            bio_ar: 'ملتزم بالتميز التشغيلي والنمو الاستراتيجي في سوق العقارات بظفار.'
-        }
-    ];
-
     return (
         <div className="min-h-screen bg-slate-950 text-white pt-32 pb-24">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -101,7 +80,6 @@ const About = () => {
                         <div
                             key={idx}
                             className="glass-card p-8 rounded-2xl text-center border border-white/5 hover:border-primary-500/30 transition-all group"
-                            style={{ animationDelay: `${idx * 100}ms` }}
                         >
                             <stat.icon className="w-12 h-12 mx-auto mb-4 text-primary-500 group-hover:scale-110 transition-transform" />
                             <div className="text-4xl font-bold text-white mb-2">{stat.value}</div>
@@ -114,7 +92,7 @@ const About = () => {
 
                 {/* Our Story */}
                 <div className="mb-24">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white">
                         {lang === 'ar' ? 'قصتنا' : 'Our Story'}
                     </h2>
                     <div className="glass-card p-8 md:p-12 rounded-3xl border border-white/5 max-w-4xl mx-auto">
@@ -132,8 +110,8 @@ const About = () => {
                 </div>
 
                 {/* Our Values */}
-                <div className="mb-24">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
+                <div>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-white">
                         {lang === 'ar' ? 'قيمنا' : 'Our Values'}
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -145,47 +123,9 @@ const About = () => {
                                 <h3 className="text-2xl font-bold text-primary-400 mb-3">
                                     {lang === 'ar' ? value.title_ar : value.title_en}
                                 </h3>
-                                <p className="text-slate-300 leading-relaxed">
+                                <p className="text-slate-300 leading-relaxed text-sm">
                                     {lang === 'ar' ? value.desc_ar : value.desc_en}
                                 </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Team Section */}
-                <div>
-                    <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-                        {lang === 'ar' ? 'فريق القيادة' : 'Leadership Team'}
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                        {team.map((member, idx) => (
-                            <div
-                                key={idx}
-                                className="glass-card p-8 rounded-2xl border border-white/5 hover:border-primary-500/30 transition-all group relative overflow-hidden"
-                            >
-                                <div className="absolute top-0 right-0 p-32 bg-primary-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-primary-500/10 transition-colors" />
-
-                                <div className="relative z-10">
-                                    <h3 className="text-2xl font-bold text-white mb-1">
-                                        {lang === 'ar' ? member.name_ar : member.name_en}
-                                    </h3>
-                                    <p className="text-primary-400 font-medium mb-4 uppercase tracking-wider text-sm">
-                                        {lang === 'ar' ? member.role_ar : member.role_en}
-                                    </p>
-                                    <p className="text-slate-300 leading-relaxed mb-6 text-sm">
-                                        {lang === 'ar' ? member.bio_ar : member.bio_en}
-                                    </p>
-                                    <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                                        <a
-                                            href={`tel:${member.phone.replace(/\s/g, '')}`}
-                                            className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors text-sm"
-                                        >
-                                            <Phone className="w-4 h-4 text-primary-500" />
-                                            <span className="font-medium dir-ltr">{member.phone}</span>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         ))}
                     </div>

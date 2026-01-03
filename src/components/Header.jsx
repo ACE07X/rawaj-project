@@ -6,7 +6,7 @@ import { useUserAuth } from '../context/UserAuthContext';
 import { Menu, X, Globe, User, LogIn, LayoutDashboard, UserPlus, LogOut, ChevronDown, Shield } from 'lucide-react';
 
 const Header = () => {
-    const { t, lang, toggleLanguage } = useLanguage();
+    const { t, lang, toggleLang } = useLanguage();
     const { isAdmin, logout: adminLogout } = useAdminAuth();
     const { user, logout: userLogout } = useUserAuth();
     const [isScrolled, setIsScrolled] = useState(false);
@@ -92,7 +92,7 @@ const Header = () => {
                 {/* Right Actions */}
                 <div className="hidden md:flex items-center gap-4">
                     <button
-                        onClick={toggleLanguage}
+                        onClick={toggleLang}
                         className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center border border-white/5 hover:border-white/20"
                     >
                         <Globe className="w-5 h-5" />
@@ -266,7 +266,7 @@ const Header = () => {
 
                     <div className="pt-6 mt-4 border-t border-white/5">
                         <button
-                            onClick={() => { toggleLanguage(); setIsMobileMenuOpen(false); }}
+                            onClick={() => { toggleLang(); setIsMobileMenuOpen(false); }}
                             className="w-full flex items-center justify-between px-5 py-4 rounded-2xl bg-white/5 text-slate-300 transition-all hover:bg-white/10 border border-white/5"
                         >
                             <div className="flex items-center gap-3">
