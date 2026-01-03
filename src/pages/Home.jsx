@@ -14,7 +14,7 @@ const Home = () => {
 
     const areas = [
         { id: 'hawana', name: 'Hawana Salalah', nameAr: 'هوانا صلالة', image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop' }, // Luxury Resort/Villa style
-        { id: 'saada', name: 'Saada', nameAr: 'السعادة', image: 'https://images.unsplash.com/photo-1600596542815-60c37c65b567?q=80&w=800&auto=format&fit=crop' }, // Modern Villa
+        { id: 'saada', name: 'Saada', nameAr: 'السعادة', image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800&auto=format&fit=crop' }, // Modern Villa
         { id: 'dahariz', name: 'Dahariz', nameAr: 'الدهاريز', image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800&auto=format&fit=crop' }, // Land/Palm Trees/Nature
         { id: 'awqad', name: 'Awqad', nameAr: 'عوقد', image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop' } // Modern House
     ];
@@ -36,7 +36,7 @@ const Home = () => {
             <div className="relative h-screen overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1548115653-f77e68bc5fdd?q=80&w=2070&auto=format&fit=crop"
+                        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop"
                         alt="Salalah Landscape"
                         className="w-full h-full object-cover animate-zoom-slow opacity-60"
                     />
