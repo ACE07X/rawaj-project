@@ -55,7 +55,18 @@ export const AdminAuthProvider = ({ children }) => {
             });
 
             if (error) throw error;
-            return { success: true };
+
+            // Explicitly check admin status immediately after login
+            const adminCheck = await supabase
+                .from('admins')
+                .select('id')
+                .eq('id', data.user.id)
+                .single();
+
+            const isUserAdmin = !!adminCheck.data && !adminCheck.error;
+            setIsAdmin(isUserAdmin);
+
+            return { success: true, isAdmin: isUserAdmin };
         } catch (error) {
             return { success: false, error: error.message };
         }

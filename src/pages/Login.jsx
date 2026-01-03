@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { useUserAuth } from '../context/UserAuthContext';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, ArrowRight, ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
 
 const Login = () => {
     const { t, lang } = useLanguage();
-    const { login: userLogin } = useUserAuth();
-    const { login: adminLogin } = useAdminAuth();
+    const { login } = useAdminAuth();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
@@ -16,37 +14,29 @@ const Login = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // Auto-detect admin login if on a special route, or just try both
-    // For simplicity, we'll try to login as user first. 
-    // If the user email matches the admin email known, we'll also set admin context.
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         try {
-            // 1. Try Standard Login First (Supabase Auth)
-            const { data, error: loginError } = await userLogin(email, password);
-            if (loginError) throw loginError;
+            // Updated login returns { success, isAdmin, error }
+            const result = await login(email, password);
 
-            // 2. Check if this user is an admin
-            // We can do this by trying to log into the Admin Context simultaneously 
-            // OR checking if the email is in the admin list.
-            // For now, let's just run the admin login check as well if it's the specific admin email.
-            // A more robust way is to query the 'admins' table, but the AdminAuthContext already handles this logic nicely.
-
-            try {
-                const isAdmin = await adminLogin(email, password);
-                if (isAdmin) {
-                    navigate('/admin'); // Redirect to Admin Dashboard
-                    return;
+            if (!result.success) {
+                if (result.error.includes("Email not confirmed")) {
+                    throw new Error(lang === 'ar' ? 'يرجى تأكيد بريدك الإلكتروني أولاً' : 'Please verify your email address first.');
                 }
-            } catch (ignore) {
-                // Not an admin, just a user
+                throw new Error(result.error);
             }
 
-            navigate('/'); // Redirect regular user home
+            // Strict Redirection Logic
+            if (result.isAdmin) {
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
+
         } catch (err) {
             setError(err.message || 'Invalid login credentials');
         } finally {
@@ -56,90 +46,109 @@ const Login = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Background Effects */}
+            {/* Luxury Background Effects */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-primary-900/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-900/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+                <img
+                    src="https://images.unsplash.com/photo-1613553507747-5f8d62ad5904?q=80&w=1920&auto=format&fit=crop"
+                    className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm scale-110"
+                    alt="Luxury Background"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/60" />
+                <div className="absolute top-0 right-0 w-96 h-96 bg-primary-600/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
             </div>
 
-            <div className="max-w-md w-full glass-card p-8 rounded-2xl relative z-10 border border-white/10 shadow-2xl">
+            <div className="max-w-md w-full relative z-10 glass-heavy rounded-3xl p-8 border border-white/10 shadow-2xl animate-fade-in-up">
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-primary-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary-400 rotate-3 transition-transform hover:rotate-6">
-                        <Lock className="w-8 h-8" />
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-500/30 transform rotate-3 border border-white/10">
+                        <span className="text-white font-serif text-3xl font-bold">R</span>
                     </div>
-                    <h2 className="text-3xl font-bold text-white mb-2 font-serif">
-                        {lang === 'ar' ? 'مرحبًا بعودتك' : 'Welcome Back'}
+                    <h2 className="text-3xl font-bold text-white mb-2 font-serif tracking-tight">
+                        {lang === 'ar' ? 'مرحبًا بعودتك' : 'Welcome to Al-Rawaj'}
                     </h2>
-                    <p className="text-slate-400 text-sm">
-                        {lang === 'ar' ? 'سجّل الدخول للمتابعة' : 'Please sign in to continue'}
+                    <p className="text-slate-400 text-sm tracking-wide uppercase">
+                        {lang === 'ar' ? 'بوابة العقارات الفاخرة' : 'Premium Real Estate Portal'}
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {error && (
-                        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-200 text-sm text-center">
-                            {error}
+                        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-200 text-sm flex items-start gap-3 animate-shake">
+                            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                            <span>{error}</span>
                         </div>
                     )}
 
                     <div className="space-y-4">
-                        <div className="relative">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                            <input
-                                type="email"
-                                required
-                                placeholder={lang === 'ar' ? 'البريد الإلكتروني' : 'Email Address'}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
-                                dir="ltr"
-                            />
+                        <div className="group">
+                            <label className="block text-xs uppercase tracking-wider text-slate-500 mb-1.5 ml-1">
+                                {lang === 'ar' ? 'البريد الإلكتروني' : 'Email Address'}
+                            </label>
+                            <div className="relative">
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-primary-400 transition-colors" />
+                                <input
+                                    type="email"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all font-medium"
+                                    dir="ltr"
+                                />
+                            </div>
                         </div>
-                        <div className="relative">
-                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                            <input
-                                type="password"
-                                required
-                                placeholder={lang === 'ar' ? 'كلمة المرور' : 'Password'}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
-                                dir="ltr"
-                            />
+
+                        <div className="group">
+                            <label className="block text-xs uppercase tracking-wider text-slate-500 mb-1.5 ml-1">
+                                {lang === 'ar' ? 'كلمة المرور' : 'Password'}
+                            </label>
+                            <div className="relative">
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-primary-400 transition-colors" />
+                                <input
+                                    type="password"
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all font-medium"
+                                    dir="ltr"
+                                />
+                            </div>
                         </div>
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-bold py-3.5 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-primary-900/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="w-full bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-primary-900/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 border border-white/10"
                     >
                         {loading ? (
-                            <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <Loader2 className="w-5 h-5 animate-spin" />
                         ) : (
                             <>
-                                {lang === 'ar' ? 'تسجيل الدخول' : 'Sign In'}
+                                {lang === 'ar' ? 'تسجيل الدخول' : 'Sign In To Dashboard'}
                                 <ArrowRight className={`w-5 h-5 ${lang === 'ar' ? 'rotate-180' : ''}`} />
                             </>
                         )}
                     </button>
 
-                    <div className="text-center pt-4 border-t border-white/5">
+                    <div className="text-center pt-6 border-t border-white/5 space-y-4">
                         <p className="text-slate-400 text-sm">
                             {lang === 'ar' ? 'ليس لديك حساب؟' : "Don't have an account?"}{' '}
-                            <Link to="/signup" className="text-primary-400 hover:text-primary-300 font-medium transition-colors">
-                                {lang === 'ar' ? 'أنشئ حساباً' : 'Sign Up'}
+                            <Link to="/signup" className="text-primary-400 hover:text-primary-300 font-bold hover:underline transition-all">
+                                {lang === 'ar' ? 'أنشئ حساباً' : 'Create Account'}
                             </Link>
                         </p>
-                    </div>
 
-                    <div className="text-center mt-6">
-                        <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-sm">
-                            <ArrowLeft className={`w-4 h-4 ${lang === 'ar' ? 'rotate-180' : ''}`} />
+                        <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs uppercase tracking-widest hover:tracking-[0.15em]">
+                            <ArrowLeft className={`w-3 h-3 ${lang === 'ar' ? 'rotate-180' : ''}`} />
                             {lang === 'ar' ? 'العودة للرئيسية' : 'Back to Home'}
                         </Link>
                     </div>
                 </form>
+            </div>
+
+            {/* Footer Credit */}
+            <div className="absolute bottom-6 text-center w-full z-10 text-white/20 text-xs">
+                &copy; 2024 Al-Rawaj Real Estate. Secured by SoulTech.
             </div>
         </div>
     );
