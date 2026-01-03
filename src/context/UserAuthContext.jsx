@@ -25,8 +25,28 @@ export const UserAuthProvider = ({ children }) => {
         return () => subscription.unsubscribe();
     }, []);
 
-    const signUp = async (email, password) => {
-        return supabase.auth.signUp({ email, password });
+    const signUp = async (email, password, metadata) => {
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    full_name: metadata.full_name,
+                    phone_number: metadata.phone_number
+                }
+            }
+        });
+
+        if (data?.user && !error) {
+            // Also insert into public.user_profiles table
+            await supabase.from('user_profiles').upsert({
+                id: data.user.id,
+                full_name: metadata.full_name,
+                phone_number: metadata.phone_number,
+                email: email // Store email too for easier management
+            });
+        }
+        return { data, error };
     };
 
     const login = async (email, password) => {

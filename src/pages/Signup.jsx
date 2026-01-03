@@ -11,6 +11,8 @@ const Signup = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [phone, setPhone] = useState('');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -20,7 +22,10 @@ const Signup = () => {
         setLoading(true);
         setError(null);
         try {
-            const { error } = await signUp(email, password);
+            const { error } = await signUp(email, password, {
+                full_name: fullName,
+                phone_number: phone
+            });
             if (error) throw error;
             setSuccess(true);
         } catch (err) {
@@ -74,6 +79,31 @@ const Signup = () => {
                         )}
 
                         <div className="space-y-4">
+                            <div className="relative">
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                                <input
+                                    type="text"
+                                    required
+                                    placeholder={lang === 'ar' ? 'الاسم الكامل' : 'Full Name'}
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
+                                />
+                            </div>
+
+                            <div className="relative">
+                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                                <input
+                                    type="tel"
+                                    required
+                                    placeholder={lang === 'ar' ? 'رقم الهاتف' : 'Phone Number'}
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-12 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all font-mono"
+                                    dir="ltr"
+                                />
+                            </div>
+
                             <div className="relative">
                                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
                                 <input

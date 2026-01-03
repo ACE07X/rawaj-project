@@ -38,9 +38,15 @@ export const AdminAuthProvider = ({ children }) => {
                 .eq('id', userId)
                 .single();
 
-            setIsAdmin(!!data && !error);
+            if (error && error.code !== 'PGRST116') {
+                console.error('Admin check error:', error);
+            }
+
+            const isReallyAdmin = !!data && !error;
+            console.log(`User ${userId} admin status:`, isReallyAdmin);
+            setIsAdmin(isReallyAdmin);
         } catch (error) {
-            console.error('Error checking admin status:', error);
+            console.error('Unexpected error checking admin status:', error);
             setIsAdmin(false);
         } finally {
             setLoading(false);

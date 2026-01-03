@@ -73,7 +73,9 @@ const AdminUsers = ({ onClose }) => {
     const isAdmin = (userId) => admins.some(a => a.id === userId);
 
     const filteredUsers = users.filter(user =>
-        user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+        user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.phone_number?.includes(searchTerm)
     );
 
     return (
@@ -107,7 +109,7 @@ const AdminUsers = ({ onClose }) => {
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
                         <input
                             type="text"
-                            placeholder={lang === 'ar' ? 'بحث بالبريد الإلكتروني...' : 'Search by email...'}
+                            placeholder={lang === 'ar' ? 'بحث بالاسم أو البريد أو الهاتف...' : 'Search by name, email or phone...'}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full bg-slate-800 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -140,23 +142,6 @@ const AdminUsers = ({ onClose }) => {
                                         : 'Users will appear here after they register'}
                                 </p>
                             </div>
-
-                            {/* Show admins if any */}
-                            {admins.length > 0 && (
-                                <div className="mt-8 pt-8 border-t border-white/5">
-                                    <h4 className="text-slate-300 font-medium mb-4 flex items-center justify-center gap-2">
-                                        <Shield className="w-4 h-4 text-primary-500" />
-                                        {lang === 'ar' ? 'المشرفون الحاليون' : 'Current Admins'}
-                                    </h4>
-                                    <div className="space-y-2">
-                                        {admins.map(admin => (
-                                            <div key={admin.id} className="bg-slate-800/50 rounded-lg px-4 py-3 text-sm text-slate-400 font-mono">
-                                                ID: {admin.id.slice(0, 8)}...
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     ) : (
                         <div className="space-y-3">
@@ -166,36 +151,37 @@ const AdminUsers = ({ onClose }) => {
                                     className="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors"
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center">
-                                            <User className="w-5 h-5 text-primary-400" />
+                                        <div className="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-400 font-bold text-lg">
+                                            {user.full_name ? user.full_name.charAt(0).toUpperCase() : <User className="w-6 h-6" />}
                                         </div>
                                         <div>
-                                            <p className="text-white font-medium">{user.email}</p>
-                                            <p className="text-slate-500 text-xs">
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-white font-bold">{user.full_name || 'No Name'}</p>
+                                                {isAdmin(user.id) && (
+                                                    <span className="px-2 py-0.5 rounded text-[10px] bg-primary-500 text-white font-black uppercase tracking-tighter">Admin</span>
+                                                )}
+                                            </div>
+                                            <p className="text-slate-400 text-sm">{user.email}</p>
+                                            <p className="text-slate-500 text-xs mt-1">
+                                                {user.phone_number && <span className="mr-3">📞 {user.phone_number}</span>}
                                                 {lang === 'ar' ? 'انضم: ' : 'Joined: '}
                                                 {new Date(user.created_at).toLocaleDateString()}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${isAdmin(user.id)
-                                                ? 'bg-primary-500/20 text-primary-400'
-                                                : 'bg-slate-700 text-slate-400'
-                                            }`}>
-                                            {isAdmin(user.id)
-                                                ? (lang === 'ar' ? 'مشرف' : 'Admin')
-                                                : (lang === 'ar' ? 'مستخدم' : 'User')
-                                            }
-                                        </span>
                                         <button
                                             onClick={() => toggleAdminRole(user.id, isAdmin(user.id))}
-                                            className={`p-2 rounded-lg transition-colors ${isAdmin(user.id)
-                                                    ? 'text-red-400 hover:bg-red-500/20'
-                                                    : 'text-primary-400 hover:bg-primary-500/20'
+                                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all border ${isAdmin(user.id)
+                                                ? 'bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500 hover:text-white'
+                                                : 'bg-primary-500/10 text-primary-400 border-primary-500/20 hover:bg-primary-500 hover:text-white'
                                                 }`}
-                                            title={isAdmin(user.id) ? 'Remove Admin' : 'Make Admin'}
                                         >
                                             <Shield className="w-4 h-4" />
+                                            {isAdmin(user.id)
+                                                ? (lang === 'ar' ? 'إزالة الإدارة' : 'Remove Admin')
+                                                : (lang === 'ar' ? 'ترقية لمشرف' : 'Make Admin')
+                                            }
                                         </button>
                                     </div>
                                 </div>
