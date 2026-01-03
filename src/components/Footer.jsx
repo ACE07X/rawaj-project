@@ -124,6 +124,8 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8">
                     <span>&copy; {new Date().getFullYear()} {lang === 'ar' ? 'الروّاج للعقارات' : 'Al-Rawaj Real Estate'}</span>
                     <span className="hidden md:inline text-white/10">|</span>
+                    <span className="text-emerald-500 font-mono text-xs bg-emerald-500/10 px-2 py-0.5 rounded">v2.0 Enterprise</span>
+                    <span className="hidden md:inline text-white/10">|</span>
                     <span className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">
                         Developed by <span className="text-white font-bold tracking-wide">SoulTech</span>
                     </span>
