@@ -3,14 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { useUserAuth } from '../context/UserAuthContext';
-import { Menu, X, Globe, User, LogIn, LayoutDashboard, UserPlus } from 'lucide-react';
+import { Menu, X, Globe, User, LogIn, LayoutDashboard, UserPlus, LogOut, ChevronDown, Shield } from 'lucide-react';
 
 const Header = () => {
     const { t, lang, toggleLanguage } = useLanguage();
-    const { isAdmin, loading: adminLoading } = useAdminAuth();
+    const { isAdmin, logout: adminLogout } = useAdminAuth();
     const { user, logout: userLogout } = useUserAuth();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,9 +22,27 @@ const Header = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleLogout = async () => {
-        await userLogout();
-        navigate('/');
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = () => setIsProfileOpen(false);
+        if (isProfileOpen) {
+            window.addEventListener('click', handleClickOutside);
+        }
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, [isProfileOpen]);
+
+    const handleLogout = async (e) => {
+        if (e) e.stopPropagation();
+        try {
+            await (isAdmin ? adminLogout() : userLogout());
+            setIsProfileOpen(false);
+            setIsMobileMenuOpen(false);
+            navigate('/');
+        } catch (err) {
+            console.error("Logout failed:", err);
+            localStorage.clear();
+            navigate('/login');
+        }
     };
 
     const navLinks = [
@@ -35,32 +54,35 @@ const Header = () => {
 
     return (
         <header
-            className={`fixed w-full z-40 transition-all duration-500 ${isScrolled ? 'bg-slate-950/95 backdrop-blur-xl border-b border-white/10 py-4 shadow-xl' : 'bg-slate-900/20 backdrop-blur-sm py-6 border-b border-white/5'
+            className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-slate-950/95 backdrop-blur-xl border-b border-white/10 py-3 shadow-2xl' : 'bg-slate-900/20 backdrop-blur-sm py-5 border-b border-white/5'
                 }`}
         >
             <div className="container mx-auto px-4 flex justify-between items-center">
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-3 group">
-                    <div className="w-12 h-12 bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl flex items-center justify-center transform group-hover:rotate-6 transition-transform duration-500 shadow-lg shadow-primary-900/50 border border-white/10">
-                        <span className="text-white font-bold text-2xl font-serif">R</span>
+                    <div className="w-11 h-11 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center transform group-hover:rotate-6 transition-transform duration-500 shadow-lg shadow-primary-900/40 border border-white/10">
+                        <span className="text-white font-bold text-xl font-serif">R</span>
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-2xl font-bold text-white font-serif tracking-tight leading-none group-hover:text-primary-400 transition-colors">
+                        <span className="text-xl font-bold text-white font-serif tracking-tight leading-none group-hover:text-primary-400 transition-colors">
                             {lang === 'ar' ? 'الروّاج' : 'Al-Rawaj'}
                         </span>
-                        <span className="text-[10px] text-accent-400 uppercase tracking-[0.2em] font-medium opacity-80 group-hover:opacity-100 transition-opacity">
+                        <span className="text-[9px] text-accent-400 uppercase tracking-[0.2em] font-medium opacity-80 group-hover:opacity-100 transition-opacity">
                             {lang === 'ar' ? 'للعقارات الفاخرة' : 'Premium Real Estate'}
                         </span>
                     </div>
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-1 bg-slate-900/50 p-1.5 rounded-full backdrop-blur-md border border-white/5 shadow-inner">
+                <nav className="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-full backdrop-blur-md border border-white/10">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             to={link.path}
-                            className="px-6 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 transition-all duration-300"
+                            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${window.location.hash === `#${link.path}` || (window.location.hash === '' && link.path === '/')
+                                ? 'bg-primary-600 text-white shadow-lg'
+                                : 'text-slate-300 hover:text-white hover:bg-white/10'
+                                }`}
                         >
                             {link.name}
                         </Link>
@@ -68,53 +90,86 @@ const Header = () => {
                 </nav>
 
                 {/* Right Actions */}
-                <div className="hidden md:flex items-center gap-3">
+                <div className="hidden md:flex items-center gap-4">
                     <button
                         onClick={toggleLanguage}
-                        className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center border border-white/5"
-                        title={lang === 'en' ? 'Switch to Arabic' : 'Switch to English'}
+                        className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center border border-white/5 hover:border-white/20"
                     >
                         <Globe className="w-5 h-5" />
                     </button>
 
-                    {isAdmin && (
-                        <Link
-                            to="/admin"
-                            className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary-600/20 text-primary-400 font-bold hover:bg-primary-600 hover:text-white transition-all border border-primary-500/20 hover:border-primary-500"
-                        >
-                            <LayoutDashboard className="w-4 h-4" />
-                            {lang === 'ar' ? 'لوحة القيادة' : 'Dashboard'}
-                        </Link>
-                    )}
-
                     {user ? (
-                        <div className="flex items-center gap-3 bg-white/5 rounded-full pl-4 pr-1.5 py-1.5 border border-white/5">
-                            <div className="flex items-center gap-2 text-slate-300 text-sm">
-                                <User className="w-4 h-4 text-primary-500" />
-                                <span className="max-w-[100px] truncate font-medium">{user.email?.split('@')[0]}</span>
-                            </div>
+                        <div className="relative">
                             <button
-                                onClick={handleLogout}
-                                className="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors border border-white/5"
+                                onClick={(e) => { e.stopPropagation(); setIsProfileOpen(!isProfileOpen); }}
+                                className={`flex items-center gap-3 pl-1.5 pr-3 py-1.5 rounded-full border transition-all duration-300 ${isProfileOpen
+                                    ? 'bg-primary-600/20 border-primary-500/50 shadow-lg shadow-primary-900/20'
+                                    : 'bg-white/5 border-white/10 hover:border-white/30 hover:bg-white/10'
+                                    }`}
                             >
-                                {lang === 'ar' ? 'خروج' : 'Logout'}
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-500 to-primary-700 flex items-center justify-center text-white text-sm font-bold shadow-md">
+                                    {user.email?.charAt(0).toUpperCase()}
+                                </div>
+                                <div className="text-left hidden lg:block">
+                                    <p className="text-xs font-bold text-white truncate max-w-[100px]">
+                                        {user.user_metadata?.full_name || user.email?.split('@')[0]}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400">
+                                        {isAdmin ? (lang === 'ar' ? 'مسؤول' : 'Administrator') : (lang === 'ar' ? 'عضو' : 'Verified Member')}
+                                    </p>
+                                </div>
+                                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isProfileOpen ? 'rotate-180 text-primary-400' : ''}`} />
                             </button>
+
+                            {/* Premium Dropdown */}
+                            {isProfileOpen && (
+                                <div className="absolute right-0 mt-3 w-64 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl py-2 overflow-hidden animate-fade-in-up z-50">
+                                    <div className="px-5 py-4 border-b border-white/5 bg-white/5">
+                                        <p className="text-sm font-bold text-white truncate">{user.user_metadata?.full_name || 'Al-Rawaj Guest'}</p>
+                                        <p className="text-[11px] text-slate-400 truncate">{user.email}</p>
+                                    </div>
+
+                                    <div className="p-2 space-y-1">
+                                        {isAdmin && (
+                                            <Link
+                                                to="/admin"
+                                                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-primary-600/20 hover:text-primary-400 transition-all border border-transparent hover:border-primary-500/20"
+                                            >
+                                                <LayoutDashboard className="w-4 h-4" />
+                                                <span className="text-sm font-medium">{lang === 'ar' ? 'لوحة القيادة' : 'Admin Dashboard'}</span>
+                                            </Link>
+                                        )}
+                                        <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 cursor-not-allowed">
+                                            <User className="w-4 h-4" />
+                                            <span className="text-sm font-medium">{lang === 'ar' ? 'الملف الشخصي (قريباً)' : 'My Profile (Soon)'}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="px-2 pt-2 mt-2 border-t border-white/5">
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 hover:text-white hover:bg-red-500/20 transition-all"
+                                        >
+                                            <LogOut className="w-4 h-4" />
+                                            <span className="text-sm font-bold">{lang === 'ar' ? 'تسجيل الخروج' : 'Sign Out'}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div className="flex items-center gap-3">
                             <Link
                                 to="/login"
-                                className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-slate-300 font-bold hover:text-white transition-colors hover:bg-white/5 border border-transparent hover:border-white/10"
+                                className="px-5 py-2.5 rounded-xl text-slate-300 font-bold hover:text-white hover:bg-white/5 transition-all text-sm"
                             >
-                                <LogIn className="w-4 h-4" />
                                 {lang === 'ar' ? 'دخول' : 'Login'}
                             </Link>
                             <Link
                                 to="/signup"
-                                className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all shadow-lg shadow-primary-900/20 active:scale-95"
+                                className="px-6 py-2.5 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-500 transition-all shadow-lg shadow-primary-900/30 active:scale-95 text-sm border border-primary-500/20"
                             >
-                                <UserPlus className="w-4 h-4" />
-                                {lang === 'ar' ? 'إنشاء حساب' : 'Get Started'}
+                                {lang === 'ar' ? 'إنشاء حساب' : 'Join Now'}
                             </Link>
                         </div>
                     )}
@@ -131,69 +186,96 @@ const Header = () => {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="absolute top-full left-0 w-full bg-slate-950/95 backdrop-blur-xl border-t border-white/10 p-4 md:hidden flex flex-col gap-4 animate-fade-in-down shadow-2xl">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            to={link.path}
-                            className="block px-4 py-3 rounded-xl hover:bg-white/5 text-slate-300 hover:text-white transition-colors font-medium border border-transparent hover:border-white/5"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
-                    <div className="h-px bg-white/10 my-2" />
-
-                    {user ? (
-                        <div className="space-y-2">
-                            <div className="px-4 py-2 text-slate-400 text-sm flex items-center gap-2">
-                                <User className="w-4 h-4" /> {user.email}
+                <div className="absolute top-full left-0 w-full bg-slate-950/98 backdrop-blur-3xl border-t border-white/10 p-6 md:hidden flex flex-col gap-6 animate-fade-in-down shadow-[0_20px_50px_rgba(0,0,0,0.5)] min-h-[50vh] max-h-[calc(100vh-80px)] overflow-y-auto z-50">
+                    {/* Mobile User Profile Section */}
+                    {user && (
+                        <div className="bg-white/5 rounded-2xl p-5 border border-white/10 shadow-inner">
+                            <div className="flex items-center gap-4 mb-4">
+                                <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-primary-500 to-primary-700 flex items-center justify-center text-white text-xl font-bold shadow-lg border-2 border-primary-500/20">
+                                    {user.email?.charAt(0).toUpperCase()}
+                                </div>
+                                <div className="overflow-hidden">
+                                    <p className="text-lg font-bold text-white truncate">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
+                                    <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                                    <div className="mt-1">
+                                        {isAdmin ? (
+                                            <span className="px-2 py-0.5 rounded bg-primary-500/20 text-primary-400 text-[10px] font-bold border border-primary-500/20 uppercase tracking-tighter">Administrator</span>
+                                        ) : (
+                                            <span className="px-2 py-0.5 rounded bg-white/10 text-slate-400 text-[10px] font-bold border border-white/10 uppercase tracking-tighter">Verified Member</span>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
-                            <button
-                                onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
-                                className="w-full text-left px-4 py-3 rounded-xl bg-red-500/10 text-red-400 font-bold hover:bg-red-500/20 transition-colors"
-                            >
-                                {lang === 'ar' ? 'تسجيل خروج' : 'Logout'}
-                            </button>
+                            <div className="grid grid-cols-1 gap-2 mt-4">
+                                {isAdmin && (
+                                    <Link
+                                        to="/admin"
+                                        className="flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-primary-600 text-white text-sm font-bold shadow-lg"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        <LayoutDashboard className="w-5 h-5" />
+                                        {lang === 'ar' ? 'لوحة القيادة' : 'Admin Dashboard'}
+                                    </Link>
+                                )}
+                                <button
+                                    onClick={handleLogout}
+                                    className="flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-red-500/10 text-red-500 text-sm font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition-all"
+                                >
+                                    <LogOut className="w-5 h-5" />
+                                    {lang === 'ar' ? 'تسجيل الخروج' : 'Sign Out'}
+                                </button>
+                            </div>
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-2 gap-3">
+                    )}
+
+                    <div className="space-y-1">
+                        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-3 ml-2">Main Menu</p>
+                        {navLinks.map((link) => (
                             <Link
-                                to="/login"
-                                className="text-center px-4 py-3 rounded-xl bg-white/5 text-slate-200 font-bold hover:bg-white/10 transition-colors flex justify-center items-center gap-2"
+                                key={link.name}
+                                to={link.path}
+                                className="flex items-center justify-between px-4 py-4 rounded-2xl hover:bg-white/5 text-slate-300 hover:text-white transition-all font-medium border border-transparent hover:border-white/5"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
-                                <LogIn className="w-4 h-4" />
-                                {lang === 'ar' ? 'دخول' : 'Login'}
+                                <span className="text-lg">{link.name}</span>
+                                <ChevronDown className="-rotate-90 w-5 h-5 text-slate-600" />
                             </Link>
+                        ))}
+                    </div>
+
+                    {!user && (
+                        <div className="grid grid-cols-1 gap-3 pt-4 border-t border-white/5">
                             <Link
                                 to="/signup"
-                                className="text-center px-4 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-500 transition-colors flex justify-center items-center gap-2"
+                                className="flex items-center justify-center gap-3 px-4 py-4 rounded-2xl bg-primary-600 text-white font-bold hover:bg-primary-500 transition-all shadow-xl shadow-primary-900/40"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
-                                <UserPlus className="w-4 h-4" />
-                                {lang === 'ar' ? 'حساب جديد' : 'Join'}
+                                <UserPlus className="w-5 h-5" />
+                                {lang === 'ar' ? 'إنشاء حساب جديد' : 'Join Al-Rawaj'}
+                            </Link>
+                            <Link
+                                to="/login"
+                                className="flex items-center justify-center gap-3 px-4 py-4 rounded-2xl bg-white/5 text-white font-bold hover:bg-white/10 transition-all border border-white/10"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                <LogIn className="w-5 h-5" />
+                                {lang === 'ar' ? 'تسجيل الدخول' : 'Sign In'}
                             </Link>
                         </div>
                     )}
 
-                    {isAdmin && (
-                        <Link
-                            to="/admin"
-                            className="block px-4 py-3 rounded-xl bg-accent-500/20 text-accent-400 font-bold border border-accent-500/30"
-                            onClick={() => setIsMobileMenuOpen(false)}
+                    <div className="pt-6 mt-4 border-t border-white/5">
+                        <button
+                            onClick={() => { toggleLanguage(); setIsMobileMenuOpen(false); }}
+                            className="w-full flex items-center justify-between px-5 py-4 rounded-2xl bg-white/5 text-slate-300 transition-all hover:bg-white/10 border border-white/5"
                         >
-                            {lang === 'ar' ? 'لوحة المشرف' : 'Admin Dashboard'}
-                        </Link>
-                    )}
-
-                    <button
-                        onClick={toggleLanguage}
-                        className="flex items-center gap-2 px-4 py-3 rounded-xl hover:bg-white/5 text-slate-300 transition-colors mt-2"
-                    >
-                        <Globe className="w-5 h-5" />
-                        {lang === 'en' ? 'Switch to Arabic' : 'Switch to English'}
-                    </button>
+                            <div className="flex items-center gap-3">
+                                <Globe className="w-5 h-5 text-primary-500" />
+                                <span className="font-bold">{lang === 'en' ? 'Switch to Arabic' : 'تغيير للغة الإنجليزية'}</span>
+                            </div>
+                            <span className="text-xs text-slate-500 uppercase font-black">{lang === 'en' ? 'AR' : 'EN'}</span>
+                        </button>
+                    </div>
                 </div>
             )}
         </header>
