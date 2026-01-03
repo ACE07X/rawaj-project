@@ -70,6 +70,28 @@ const Admin = () => {
         }
     };
 
+    const [editingId, setEditingId] = useState(null);
+
+    const handleEditProperty = (property) => {
+        setNewProperty({
+            title_en: property.title_en || property.title,
+            title_ar: property.title_ar,
+            description_en: property.description_en,
+            description_ar: property.description_ar,
+            price: property.price,
+            size: property.size,
+            type: property.type,
+            status: property.status,
+            city_en: property.city_en || 'Salalah',
+            city_ar: property.city_ar || 'صلالة',
+            area_en: property.area_en,
+            area_ar: property.area_ar,
+            image_url: property.image_url
+        });
+        setEditingId(property.id);
+        setShowAddModal(true);
+    };
+
     const handleAddProperty = async (e) => {
         e.preventDefault();
         setSubmitting(true);
@@ -86,12 +108,27 @@ const Admin = () => {
                 }
             }
 
-            const propertyToInsert = {
+            const propertyData = {
                 ...newProperty,
                 image_url: finalImageUrl
             };
 
-            const { error } = await supabase.from('properties').insert([propertyToInsert]);
+            let error;
+            if (editingId) {
+                // Update existing
+                const { error: updateError } = await supabase
+                    .from('properties')
+                    .update(propertyData)
+                    .eq('id', editingId);
+                error = updateError;
+            } else {
+                // Insert new
+                const { error: insertError } = await supabase
+                    .from('properties')
+                    .insert([propertyData]);
+                error = insertError;
+            }
+
             if (error) throw error;
 
             setShowAddModal(false);
@@ -102,10 +139,11 @@ const Admin = () => {
                 city_en: 'Salalah', city_ar: 'صلالة', area_en: '', area_ar: '', image_url: ''
             });
             setImageFile(null);
+            setEditingId(null);
             fetchProperties();
-            alert("Property Published Successfully!");
+            alert(editingId ? "Property Updated Successfully!" : "Property Published Successfully!");
         } catch (err) {
-            alert('Failed to add property: ' + err.message);
+            alert('Failed to save property: ' + err.message);
         } finally {
             setSubmitting(false);
         }
@@ -251,9 +289,14 @@ const Admin = () => {
                                                 </td>
                                                 <td className="px-6 py-4 font-semibold text-primary-400">{parseInt(property.price).toLocaleString()} OMR</td>
                                                 <td className="px-6 py-4 text-right">
-                                                    <button onClick={() => handleDeleteProperty(property.id)} className="p-2 rounded-lg text-red-400 hover:bg-red-500/20 transition-colors">
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <button onClick={() => handleEditProperty(property)} className="p-2 rounded-lg text-primary-400 hover:bg-primary-500/20 transition-colors" title="Edit Property">
+                                                            <Edit className="w-4 h-4" />
+                                                        </button>
+                                                        <button onClick={() => handleDeleteProperty(property.id)} className="p-2 rounded-lg text-red-400 hover:bg-red-500/20 transition-colors" title="Delete Property">
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}
@@ -266,12 +309,17 @@ const Admin = () => {
             </main>
 
             {/* Add Property Modal */}
+            {/* Add Property Modal */}
             {showAddModal && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-slate-900 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-white/10 shadow-2xl animate-zoom-in">
                         <div className="sticky top-0 bg-slate-900 border-b border-white/5 p-6 flex items-center justify-between z-10">
                             <h3 className="text-xl font-bold flex items-center gap-2">
-                                <PlusCircle className="w-5 h-5 text-primary-500" /> Post New Property
+                                {editingId ? (
+                                    <><Edit className="w-5 h-5 text-primary-500" /> Edit Property</>
+                                ) : (
+                                    <><PlusCircle className="w-5 h-5 text-primary-500" /> Post New Property</>
+                                )}
                             </h3>
                             <button onClick={() => setShowAddModal(false)} className="p-2 rounded-lg hover:bg-white/10 transition-colors"><X className="w-5 h-5" /></button>
                         </div>
@@ -281,12 +329,12 @@ const Admin = () => {
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-slate-400">Property Image</label>
                                 <div className="border-2 border-dashed border-white/10 rounded-xl p-8 text-center hover:border-primary-500/50 transition-colors bg-slate-800/50">
-                                    {imageFile ? (
+                                    {(imageFile || newProperty.image_url) ? (
                                         <div className="relative inline-block">
-                                            <img src={URL.createObjectURL(imageFile)} alt="Preview" className="h-48 rounded-lg object-contain" />
+                                            <img src={imageFile ? URL.createObjectURL(imageFile) : newProperty.image_url} alt="Preview" className="h-48 rounded-lg object-contain" />
                                             <button
                                                 type="button"
-                                                onClick={() => setImageFile(null)}
+                                                onClick={() => { setImageFile(null); setNewProperty({ ...newProperty, image_url: '' }); }}
                                                 className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full shadow-lg hover:bg-red-600"
                                             >
                                                 <X className="w-4 h-4" />
@@ -354,9 +402,9 @@ const Admin = () => {
 
                             <button type="submit" disabled={submitting || uploading} className="w-full bg-primary-600 hover:bg-primary-500 text-white py-4 rounded-xl font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-lg shadow-lg shadow-primary-600/20">
                                 {submitting || uploading ? (
-                                    <><Loader2 className="w-6 h-6 animate-spin" /> {uploading ? 'Uploading Image...' : 'Publishing Property...'}</>
+                                    <><Loader2 className="w-6 h-6 animate-spin" /> {uploading ? 'Uploading Image...' : (editingId ? 'Updating Property...' : 'Publishing Property...')}</>
                                 ) : (
-                                    <><Upload className="w-6 h-6" /> Publish Now</>
+                                    <><Upload className="w-6 h-6" /> {editingId ? 'Update Property' : 'Publish Now'}</>
                                 )}
                             </button>
                         </form>
