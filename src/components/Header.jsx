@@ -102,17 +102,17 @@ const Header = () => {
                         <div className="flex items-center gap-3">
                             <Link
                                 to="/login"
-                                className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/5 text-slate-200 font-bold hover:bg-white/10 transition-all border border-white/10 hover:border-white/20"
+                                className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-slate-300 font-bold hover:text-white transition-colors hover:bg-white/5 border border-transparent hover:border-white/10"
                             >
                                 <LogIn className="w-4 h-4" />
                                 {lang === 'ar' ? 'دخول' : 'Login'}
                             </Link>
                             <Link
                                 to="/signup"
-                                className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold hover:from-primary-500 hover:to-primary-600 transition-all shadow-lg shadow-primary-900/30 hover:scale-105 active:scale-95 border border-white/10"
+                                className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all shadow-lg shadow-primary-900/20 active:scale-95"
                             >
                                 <UserPlus className="w-4 h-4" />
-                                {lang === 'ar' ? 'إنشاء حساب' : 'Join Us'}
+                                {lang === 'ar' ? 'إنشاء حساب' : 'Get Started'}
                             </Link>
                         </div>
                     )}
