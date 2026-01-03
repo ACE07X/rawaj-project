@@ -70,45 +70,51 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                {/* Contact Info */}
+                {/* Contact Info (Founders Separated) */}
                 <div>
-                    <h4 className="text-white font-bold text-lg mb-6 font-serif">
-                        {lang === 'ar' ? 'تواصل معنا' : 'Contact Us'}
+                    <h4 className="text-white font-bold text-lg mb-6 font-serif border-b border-accent-500/30 pb-2 inline-block">
+                        {lang === 'ar' ? 'اتصل بالمؤسسين' : 'Contact Founders'}
                     </h4>
-                    <div className="space-y-5">
+                    <div className="space-y-6">
+                        {/* Founder 1 */}
                         <div className="flex items-start gap-4 group">
-                            <div className="p-3 rounded-xl bg-white/5 group-hover:bg-primary-500/20 text-primary-500 transition-colors border border-white/5">
-                                <MapPin className="w-5 h-5" />
+                            <div className="p-3 rounded-xl bg-white/5 group-hover:bg-primary-600/20 text-accent-400 transition-colors border border-white/5 shadow-lg">
+                                <Phone className="w-5 h-5" />
                             </div>
                             <div>
-                                <p className="text-slate-300 text-sm leading-relaxed font-medium">
-                                    {lang === 'ar' ? 'صلالة، سلطنة عمان' : 'Salalah, Sultanate of Oman'}
-                                </p>
-                                <p className="text-slate-500 text-xs mt-1">{lang === 'ar' ? 'سلطنة عمان' : 'Sultanate of Oman'}</p>
+                                <h5 className="text-accent-400 text-xs font-bold uppercase tracking-wider mb-1">
+                                    {lang === 'ar' ? 'المؤسس والرئيس التنفيذي' : 'Founder & CEO'}
+                                </h5>
+                                <a href="tel:99493888" className="text-white hover:text-primary-400 transition-colors font-bold tracking-widest dir-ltr text-lg block">
+                                    +968 9949 3888
+                                </a>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 group">
-                            <div className="p-3 rounded-xl bg-white/5 group-hover:bg-primary-500/20 text-primary-500 transition-colors border border-white/5">
+                        {/* Founder 2 */}
+                        <div className="flex items-start gap-4 group">
+                            <div className="p-3 rounded-xl bg-white/5 group-hover:bg-primary-600/20 text-accent-400 transition-colors border border-white/5 shadow-lg">
                                 <Phone className="w-5 h-5" />
                             </div>
-                            <div className="flex flex-col gap-1">
-                                <a href="tel:99493888" className="text-slate-300 hover:text-white transition-colors font-bold tracking-wider dir-ltr text-left">
-                                    +968 9949 3888
-                                </a>
-                                <a href="tel:93206066" className="text-slate-500 hover:text-white transition-colors text-xs tracking-wide dir-ltr text-left">
+                            <div>
+                                <h5 className="text-accent-400 text-xs font-bold uppercase tracking-wider mb-1">
+                                    {lang === 'ar' ? 'شريك مؤسس' : 'Co-Founder'}
+                                </h5>
+                                <a href="tel:93206066" className="text-white hover:text-primary-400 transition-colors font-bold tracking-widest dir-ltr text-lg block">
                                     +968 9320 6066
                                 </a>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 group">
-                            <div className="p-3 rounded-xl bg-white/5 group-hover:bg-primary-500/20 text-primary-500 transition-colors border border-white/5">
-                                <Mail className="w-5 h-5" />
+                        <div className="pt-4 border-t border-white/5 mt-4">
+                            <div className="flex items-center gap-4 group">
+                                <div className="p-2 rounded-lg bg-white/5 text-slate-400">
+                                    <Mail className="w-4 h-4" />
+                                </div>
+                                <a href="mailto:info@alrawaj.com" className="text-slate-400 hover:text-white transition-colors text-sm">
+                                    info@alrawaj.com
+                                </a>
                             </div>
-                            <a href="mailto:info@alrawaj.com" className="text-slate-300 hover:text-white transition-colors text-sm">
-                                info@alrawaj.com
-                            </a>
                         </div>
                     </div>
                 </div>

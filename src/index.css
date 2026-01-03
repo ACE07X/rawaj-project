@@ -41,24 +41,24 @@ html[dir="rtl"] h6 {
 
 @layer utilities {
   .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-lg;
   }
 
   .glass-heavy {
-    @apply bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl;
+    @apply bg-slate-950/90 backdrop-blur-xl border border-white/10 shadow-2xl;
   }
 
-  /* Premium Card Hover Effect */
+  /* Sharp, Premium Card Hover Effect */
   .glass-card {
-    @apply bg-slate-900/40 backdrop-blur-md border border-white/5 transition-all duration-300 hover:border-accent-400/30 hover:bg-slate-900/60 hover:shadow-xl hover:shadow-accent-400/5;
+    @apply bg-white/[0.03] backdrop-blur-md border border-white/5 transition-all duration-300 hover:border-accent-500/50 hover:bg-white/[0.05] hover:shadow-2xl hover:shadow-accent-500/10 hover:-translate-y-1;
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-accent-100 to-accent-300;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400;
   }
 
   .text-gradient-gold {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-accent-400 to-accent-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-accent-500 to-accent-600;
   }
 
   .dir-rtl {
