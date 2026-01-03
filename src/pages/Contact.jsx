@@ -7,14 +7,10 @@ const Contact = () => {
 
     const supportChannels = [
         {
-            label_en: "Primary Support",
-            label_ar: "الدعم المباشر",
             phone: "+968 9949 3888",
             link: "https://wa.me/96899493888"
         },
         {
-            label_en: "Sales Support",
-            label_ar: "دعم المبيعات",
             phone: "+968 9320 6066",
             link: "https://wa.me/93206066"
         }
@@ -82,10 +78,6 @@ const Contact = () => {
                         {supportChannels.map((channel, idx) => (
                             <div key={idx} className="glass-card p-10 rounded-2xl border border-white/5 hover:border-primary-500/30 transition-all group relative overflow-hidden">
                                 <div className="absolute top-0 right-0 p-32 bg-primary-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-primary-500/10 transition-colors" />
-
-                                <h3 className="text-2xl font-bold text-white mb-6 relative z-10">
-                                    {lang === 'ar' ? channel.label_ar : channel.label_en}
-                                </h3>
 
                                 <div className="flex flex-col gap-4 relative z-10">
                                     <a href={`tel:${channel.phone.replace(/\s/g, '')}`} className="flex items-center gap-4 text-slate-300 hover:text-white transition-colors bg-white/5 p-5 rounded-xl hover:bg-white/10 border border-white/5">

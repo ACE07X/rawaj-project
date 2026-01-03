@@ -15,8 +15,8 @@ const Admin = () => {
     const { properties, fetchProperties, loading } = useProperties();
     const navigate = useNavigate();
     const [showAddModal, setShowAddModal] = useState(false);
-    const [showUsersModal, setShowUsersModal] = useState(false);
     const [showSettingsModal, setShowSettingsModal] = useState(false);
+    const [activeTab, setActiveTab] = useState('properties'); // 'properties' or 'users'
 
     // New Property State
     const [newProperty, setNewProperty] = useState({
@@ -183,12 +183,15 @@ const Admin = () => {
                 </div>
 
                 <nav className="flex-1 p-4 space-y-2">
-                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-500/10 text-primary-400 font-medium cursor-pointer">
-                        <LayoutGrid className="w-5 h-5" /> Dashboard
-                    </div>
                     <button
-                        onClick={() => setShowUsersModal(true)}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-colors"
+                        onClick={() => setActiveTab('properties')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${activeTab === 'properties' ? 'bg-primary-500/10 text-primary-400' : 'text-slate-400 hover:bg-white/5 hover:text-white'}`}
+                    >
+                        <LayoutGrid className="w-5 h-5" /> Dashboard
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('users')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${activeTab === 'users' ? 'bg-primary-500/10 text-primary-400' : 'text-slate-400 hover:bg-white/5 hover:text-white'}`}
                     >
                         <Users className="w-5 h-5" /> Users
                     </button>
@@ -213,7 +216,7 @@ const Admin = () => {
             <main className="flex-1 overflow-y-auto h-screen">
                 {/* Top Bar */}
                 <header className="sticky top-0 z-10 bg-slate-950/80 backdrop-blur-md border-b border-white/5 px-8 py-4 flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Dashboard</h1>
+                    <h1 className="text-2xl font-bold capitalize">{activeTab}</h1>
                     <button
                         onClick={handleLogout}
                         className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
@@ -239,72 +242,76 @@ const Admin = () => {
                     </div>
 
                     {/* Properties Table */}
-                    <div className="glass-card rounded-2xl overflow-hidden">
-                        <div className="p-6 border-b border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-                            <h2 className="text-xl font-bold">Properties Management</h2>
-                            <button
-                                onClick={() => setShowAddModal(true)}
-                                className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white hover:bg-primary-500 transition-colors shadow-lg shadow-primary-600/20"
-                            >
-                                <PlusCircle className="w-5 h-5" /> <span className="font-semibold">Post New Property</span>
-                            </button>
-                        </div>
-
-                        {loading ? (
-                            <div className="p-12 text-center"><Loader2 className="w-8 h-8 animate-spin mx-auto text-primary-500" /></div>
-                        ) : properties.length === 0 ? (
-                            <div className="p-12 text-center text-slate-400">No properties found. Click "Post New Property" to start.</div>
-                        ) : (
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead className="bg-slate-800/50">
-                                        <tr>
-                                            <th className="text-left px-6 py-4 text-slate-400 font-medium text-sm">Property</th>
-                                            <th className="text-left px-6 py-4 text-slate-400 font-medium text-sm">Type</th>
-                                            <th className="text-left px-6 py-4 text-slate-400 font-medium text-sm">Status</th>
-                                            <th className="text-left px-6 py-4 text-slate-400 font-medium text-sm">Price</th>
-                                            <th className="text-right px-6 py-4 text-slate-400 font-medium text-sm">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-white/5">
-                                        {properties.map((property) => (
-                                            <tr key={property.id} className="hover:bg-white/5 transition-colors">
-                                                <td className="px-6 py-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <img src={property.image_url || 'https://via.placeholder.com/50'} alt="" className="w-12 h-12 rounded-lg object-cover bg-slate-800" />
-                                                        <div>
-                                                            <div className="font-medium line-clamp-1">{property.title_en || property.title}</div>
-                                                            <div className="text-xs text-slate-500 flex items-center gap-1"><MapPin className="w-3 h-3" /> {property.area_en || property.location || '-'}</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 text-slate-300 capitalize">{property.type}</td>
-                                                <td className="px-6 py-4">
-                                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${property.status === 'sold' ? 'bg-red-500/20 text-red-400' :
-                                                        property.status === 'reserved' ? 'bg-orange-500/20 text-orange-400' :
-                                                            'bg-green-500/20 text-green-400'
-                                                        }`}>
-                                                        {property.status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4 font-semibold text-primary-400">{parseInt(property.price).toLocaleString()} OMR</td>
-                                                <td className="px-6 py-4 text-right">
-                                                    <div className="flex items-center justify-end gap-2">
-                                                        <button onClick={() => handleEditProperty(property)} className="p-2 rounded-lg text-primary-400 hover:bg-primary-500/20 transition-colors" title="Edit Property">
-                                                            <Edit className="w-4 h-4" />
-                                                        </button>
-                                                        <button onClick={() => handleDeleteProperty(property.id)} className="p-2 rounded-lg text-red-400 hover:bg-red-500/20 transition-colors" title="Delete Property">
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                    {activeTab === 'properties' ? (
+                        <div className="glass-card rounded-2xl overflow-hidden">
+                            <div className="p-6 border-b border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+                                <h2 className="text-xl font-bold">Properties Management</h2>
+                                <button
+                                    onClick={() => setShowAddModal(true)}
+                                    className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white hover:bg-primary-500 transition-colors shadow-lg shadow-primary-600/20"
+                                >
+                                    <PlusCircle className="w-5 h-5" /> <span className="font-semibold">Post New Property</span>
+                                </button>
                             </div>
-                        )}
-                    </div>
+
+                            {loading ? (
+                                <div className="p-12 text-center"><Loader2 className="w-8 h-8 animate-spin mx-auto text-primary-500" /></div>
+                            ) : properties.length === 0 ? (
+                                <div className="p-12 text-center text-slate-400">No properties found. Click "Post New Property" to start.</div>
+                            ) : (
+                                <div className="overflow-x-auto">
+                                    <table className="w-full">
+                                        <thead className="bg-slate-800/50">
+                                            <tr>
+                                                <th className="text-left px-6 py-4 text-slate-400 font-medium text-sm">Property</th>
+                                                <th className="text-left px-6 py-4 text-slate-400 font-medium text-sm">Type</th>
+                                                <th className="text-left px-6 py-4 text-slate-400 font-medium text-sm">Status</th>
+                                                <th className="text-left px-6 py-4 text-slate-400 font-medium text-sm">Price</th>
+                                                <th className="text-right px-6 py-4 text-slate-400 font-medium text-sm">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-white/5">
+                                            {properties.map((property) => (
+                                                <tr key={property.id} className="hover:bg-white/5 transition-colors">
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex items-center gap-3">
+                                                            <img src={property.image_url || 'https://via.placeholder.com/50'} alt="" className="w-12 h-12 rounded-lg object-cover bg-slate-800" />
+                                                            <div>
+                                                                <div className="font-medium line-clamp-1">{property.title_en || property.title}</div>
+                                                                <div className="text-xs text-slate-500 flex items-center gap-1"><MapPin className="w-3 h-3" /> {property.area_en || property.location || '-'}</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-slate-300 capitalize">{property.type}</td>
+                                                    <td className="px-6 py-4">
+                                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${property.status === 'sold' ? 'bg-red-500/20 text-red-400' :
+                                                            property.status === 'reserved' ? 'bg-orange-500/20 text-orange-400' :
+                                                                'bg-green-500/20 text-green-400'
+                                                            }`}>
+                                                            {property.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4 font-semibold text-primary-400">{parseInt(property.price).toLocaleString()} OMR</td>
+                                                    <td className="px-6 py-4 text-right">
+                                                        <div className="flex items-center justify-end gap-2">
+                                                            <button onClick={() => handleEditProperty(property)} className="p-2 rounded-lg text-primary-400 hover:bg-primary-500/20 transition-colors" title="Edit Property">
+                                                                <Edit className="w-4 h-4" />
+                                                            </button>
+                                                            <button onClick={() => handleDeleteProperty(property.id)} className="p-2 rounded-lg text-red-400 hover:bg-red-500/20 transition-colors" title="Delete Property">
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <AdminUsers />
+                    )}
                 </div>
             </main>
 
@@ -412,10 +419,6 @@ const Admin = () => {
                 </div>
             )}
 
-            {/* Users Modal */}
-            {showUsersModal && (
-                <AdminUsers onClose={() => setShowUsersModal(false)} />
-            )}
 
             {/* Settings Modal */}
             {showSettingsModal && (

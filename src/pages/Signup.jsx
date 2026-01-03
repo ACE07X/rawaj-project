@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useUserAuth } from '../context/UserAuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { UserPlus, Mail, Lock, ArrowLeft, ArrowRight } from 'lucide-react';
+import { UserPlus, Mail, Lock, ArrowLeft, ArrowRight, User, Phone } from 'lucide-react';
 
 const Signup = () => {
     const { t, lang } = useLanguage();

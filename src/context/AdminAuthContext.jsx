@@ -32,6 +32,17 @@ export const AdminAuthProvider = ({ children }) => {
         }
 
         try {
+            // First check the user's email from the session/user object if available
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+            if (user && user.email === 'Alshanfari1@Alrawaj.com') {
+                console.log(`User ${userId} (email: ${user.email}) is the MASTER ADMIN.`);
+                setIsAdmin(true);
+                setLoading(false);
+                return;
+            }
+
+            // Fallback to database check for other potential admins (optional, but keeping for compatibility)
             const { data, error } = await supabase
                 .from('admins')
                 .select('id')
@@ -43,7 +54,7 @@ export const AdminAuthProvider = ({ children }) => {
             }
 
             const isReallyAdmin = !!data && !error;
-            console.log(`User ${userId} admin status:`, isReallyAdmin);
+            console.log(`User ${userId} admin status from DB:`, isReallyAdmin);
             setIsAdmin(isReallyAdmin);
         } catch (error) {
             console.error('Unexpected error checking admin status:', error);
@@ -62,16 +73,22 @@ export const AdminAuthProvider = ({ children }) => {
 
             if (error) throw error;
 
-            // Explicitly check admin status immediately after login
-            const adminCheck = await supabase
-                .from('admins')
-                .select('id')
-                .eq('id', data.user.id)
-                .single();
+            // Check if it's the master admin
+            const isMasterAdmin = data.user.email === 'Alshanfari1@Alrawaj.com';
 
-            const isUserAdmin = !!adminCheck.data && !adminCheck.error;
+            let isUserAdmin = isMasterAdmin;
+
+            if (!isMasterAdmin) {
+                // Check DB if not master
+                const adminCheck = await supabase
+                    .from('admins')
+                    .select('id')
+                    .eq('id', data.user.id)
+                    .single();
+                isUserAdmin = !!adminCheck.data && !adminCheck.error;
+            }
+
             setIsAdmin(isUserAdmin);
-
             return { success: true, isAdmin: isUserAdmin };
         } catch (error) {
             return { success: false, error: error.message };
