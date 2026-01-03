@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+    @apply bg-slate-950 text-slate-100 antialiased selection:bg-primary-500/30 selection:text-primary-200;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', 'Noto Sans Arabic', serif;
+  }
+}
+
+/* RTL Support */
+html[dir="rtl"] body {
+  font-family: 'Noto Sans Arabic', sans-serif;
+}
+html[dir="rtl"] h1, 
+html[dir="rtl"] h2, 
+html[dir="rtl"] h3, 
+html[dir="rtl"] h4, 
+html[dir="rtl"] h5, 
+html[dir="rtl"] h6 {
+  font-family: 'Noto Sans Arabic', serif;
+}
+
+/* Premium Glassmorphism */
+@layer utilities {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/10 shadow-lg;
+  }
+  
+  .glass-heavy {
+    @apply bg-slate-900/80 backdrop-blur-xl border-b border-white/5 shadow-2xl;
+  }
+
+  .glass-card {
+    @apply bg-slate-800/40 backdrop-blur-md border border-white/5 shadow-xl hover:shadow-primary-500/10 hover:border-primary-500/30 transition-all duration-300;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400;
+  }
+  
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-400 to-accent-200;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-slate-900;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-700 rounded-full hover:bg-primary-600 transition-colors;
+}
