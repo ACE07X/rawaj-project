@@ -8,28 +8,44 @@ export default {
         extend: {
             colors: {
                 primary: {
-                    50: '#ecfdf5',
-                    100: '#d1fae5',
-                    200: '#a7f3d0',
-                    300: '#6ee7b7',
-                    400: '#34d399',
-                    500: '#10b981',
-                    600: '#059669', // Emerald 600 (Salalah Green)
-                    700: '#047857',
-                    800: '#065f46',
-                    900: '#064e3b',
+                    50: '#f2fcf5',
+                    100: '#e1f8e8',
+                    200: '#c3efd2',
+                    300: '#94e0b3',
+                    400: '#5cc78e',
+                    500: '#34d399', // Kept vibrant for UI elements
+                    600: '#16a34a', // Lush Green
+                    700: '#15803d', // Deep Khareef
+                    800: '#166534',
+                    900: '#14532d',
+                    950: '#052e16', // Very dark green background
                 },
                 secondary: {
-                    500: '#0ea5e9', // Ocean Blue
+                    50: '#f0f9ff',
+                    100: '#e0f2fe',
+                    200: '#bae6fd',
+                    300: '#7dd3fc',
+                    400: '#38bdf8',
+                    500: '#0ea5e9',
                     600: '#0284c7',
+                    700: '#0369a1',
+                    800: '#075985',
+                    900: '#0c4a6e', // Ocean depths
                 },
                 accent: {
-                    500: '#d97706', // Golden Sand
-                    600: '#b45309',
+                    50: '#fbf7eb',
+                    100: '#f5ebd1',
+                    200: '#ebd9a8',
+                    300: '#e0c275',
+                    400: '#d4af37', // Frankincense Gold
+                    500: '#b89628',
+                    600: '#9b7b1e',
+                    700: '#7d6018',
+                    800: '#664d18',
+                    900: '#543f16',
                 },
                 dark: {
-                    800: '#0f172a', // Slate 900
-                    900: '#020617', // Slate 950
+                    900: '#020617', // Deep night
                 }
             },
             fontFamily: {

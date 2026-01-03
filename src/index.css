@@ -9,13 +9,18 @@
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   body {
     font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
     @apply bg-slate-950 text-slate-100 antialiased selection:bg-primary-500/30 selection:text-primary-200;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Playfair Display', 'Noto Sans Arabic', serif;
   }
 }
@@ -24,45 +29,56 @@
 html[dir="rtl"] body {
   font-family: 'Noto Sans Arabic', sans-serif;
 }
-html[dir="rtl"] h1, 
-html[dir="rtl"] h2, 
-html[dir="rtl"] h3, 
-html[dir="rtl"] h4, 
-html[dir="rtl"] h5, 
+
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] h4,
+html[dir="rtl"] h5,
 html[dir="rtl"] h6 {
   font-family: 'Noto Sans Arabic', serif;
 }
 
-/* Premium Glassmorphism */
 @layer utilities {
   .glass {
-    @apply bg-white/10 backdrop-blur-md border border-white/10 shadow-lg;
-  }
-  
-  .glass-heavy {
-    @apply bg-slate-900/80 backdrop-blur-xl border-b border-white/5 shadow-2xl;
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
   }
 
+  .glass-heavy {
+    @apply bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+
+  /* Premium Card Hover Effect */
   .glass-card {
-    @apply bg-slate-800/40 backdrop-blur-md border border-white/5 shadow-xl hover:shadow-primary-500/10 hover:border-primary-500/30 transition-all duration-300;
+    @apply bg-slate-900/40 backdrop-blur-md border border-white/5 transition-all duration-300 hover:border-accent-400/30 hover:bg-slate-900/60 hover:shadow-xl hover:shadow-accent-400/5;
   }
-  
+
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-accent-100 to-accent-300;
   }
-  
+
   .text-gradient-gold {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-400 to-accent-200;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-accent-400 to-accent-500;
+  }
+
+  .dir-rtl {
+    direction: rtl;
+  }
+
+  .dir-ltr {
+    direction: ltr;
   }
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar for Webkit */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  @apply bg-slate-900;
+  @apply bg-slate-950;
 }
+
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-700 rounded-full hover:bg-primary-600 transition-colors;
+  @apply bg-slate-800 rounded-full hover:bg-slate-700 transition-colors border border-slate-900;
 }
