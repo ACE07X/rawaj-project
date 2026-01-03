@@ -77,15 +77,17 @@ const Header = () => {
                         <Globe className="w-5 h-5" />
                     </button>
 
-                    {isAdmin ? (
+                    {isAdmin && (
                         <Link
                             to="/admin"
-                            className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary-600 text-white font-bold hover:bg-primary-500 transition-all shadow-lg shadow-primary-600/20 hover:scale-105 active:scale-95"
+                            className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary-600/20 text-primary-400 font-bold hover:bg-primary-600 hover:text-white transition-all border border-primary-500/20 hover:border-primary-500"
                         >
                             <LayoutDashboard className="w-4 h-4" />
                             {lang === 'ar' ? 'لوحة القيادة' : 'Dashboard'}
                         </Link>
-                    ) : user ? (
+                    )}
+
+                    {user ? (
                         <div className="flex items-center gap-3 bg-white/5 rounded-full pl-4 pr-1.5 py-1.5 border border-white/5">
                             <div className="flex items-center gap-2 text-slate-300 text-sm">
                                 <User className="w-4 h-4 text-primary-500" />
