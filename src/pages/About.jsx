@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { Award, Users, Target, TrendingUp } from 'lucide-react';
+import { Award, Users, MapPin, Shield } from 'lucide-react';
 
 const About = () => {
     const { lang } = useLanguage();
@@ -19,16 +19,16 @@ const About = () => {
             label_ar: 'عميل راضٍ'
         },
         {
-            icon: Target,
-            value: '1000+',
-            label_en: 'Properties Sold',
-            label_ar: 'عقار مباع'
+            icon: MapPin,
+            value: '25+',
+            label_en: 'Prime Locations',
+            label_ar: 'موقع متميز'
         },
         {
-            icon: TrendingUp,
-            value: '100M+',
-            label_en: 'OMR in Sales',
-            label_ar: 'ريال عماني مبيعات'
+            icon: Shield,
+            value: '100%',
+            label_en: 'Expert Advisory',
+            label_ar: 'استشارات خبيرة'
         }
     ];
 
