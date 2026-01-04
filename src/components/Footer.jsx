@@ -82,9 +82,7 @@ const Footer = () => {
                                 <Phone className="w-5 h-5" />
                             </div>
                             <div>
-                                <h5 className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mb-1">
-                                    {lang === 'ar' ? 'الرقم المباشر' : 'Direct Line'}
-                                </h5>
+
                                 <a href="tel:99493888" className="text-white hover:text-primary-400 transition-colors font-bold tracking-widest dir-ltr text-lg block">
                                     +968 9949 3888
                                 </a>
@@ -97,9 +95,7 @@ const Footer = () => {
                                 <Phone className="w-5 h-5" />
                             </div>
                             <div>
-                                <h5 className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mb-1">
-                                    {lang === 'ar' ? 'قسم المبيعات' : 'Sales Department'}
-                                </h5>
+
                                 <a href="tel:93206066" className="text-white hover:text-primary-400 transition-colors font-bold tracking-widest dir-ltr text-lg block">
                                     +968 9320 6066
                                 </a>
