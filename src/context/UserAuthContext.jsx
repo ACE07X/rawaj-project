@@ -30,6 +30,7 @@ export const UserAuthProvider = ({ children }) => {
             email,
             password,
             options: {
+                emailRedirectTo: window.location.origin,
                 data: {
                     full_name: metadata.full_name,
                     phone_number: metadata.phone_number
