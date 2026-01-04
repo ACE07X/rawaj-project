@@ -102,16 +102,7 @@ const Footer = () => {
                             </div>
                         </div>
 
-                        <div className="pt-4 border-t border-white/5 mt-4">
-                            <div className="flex items-center gap-4 group">
-                                <div className="p-2 rounded-lg bg-white/5 text-slate-400">
-                                    <Mail className="w-4 h-4" />
-                                </div>
-                                <a href="mailto:info@alrawaj.com" className="text-slate-400 hover:text-white transition-colors text-sm">
-                                    info@alrawaj.com
-                                </a>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

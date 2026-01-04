@@ -10,7 +10,7 @@ const AdminSettings = ({ onClose }) => {
         company_name_ar: 'الروّاج للعقارات',
         phone_primary: '99493888',
         phone_secondary: '93206066',
-        email: 'info@alrawaj.com',
+        email: '',
         address_en: 'Salalah, Sultanate of Oman',
         address_ar: 'صلالة، سلطنة عمان',
     });
@@ -146,15 +146,7 @@ const AdminSettings = ({ onClose }) => {
                                             className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                                         />
                                     </div>
-                                    <div className="space-y-1 md:col-span-2">
-                                        <label className="text-xs text-slate-500">Email</label>
-                                        <input
-                                            type="email"
-                                            value={settings.email}
-                                            onChange={(e) => handleChange('email', e.target.value)}
-                                            className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                                        />
-                                    </div>
+
                                 </div>
                             </div>
 

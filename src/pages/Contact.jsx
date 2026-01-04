@@ -47,17 +47,7 @@ const Contact = () => {
                         </div>
 
                         {/* Email */}
-                        <div className="glass-card p-8 rounded-2xl flex items-start gap-4 hover:border-primary-500/30 transition-all group">
-                            <div className="p-4 rounded-xl bg-primary-500/10 text-primary-500 group-hover:bg-primary-500 group-hover:text-white transition-colors">
-                                <Mail className="w-6 h-6" />
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white mb-2">{lang === 'ar' ? 'البريد الإلكتروني' : 'Email Us'}</h3>
-                                <a href="mailto:info@alrawaj.com" className="text-slate-300 hover:text-white transition-colors block font-light">
-                                    info@alrawaj.com
-                                </a>
-                            </div>
-                        </div>
+
 
                         {/* Work Hours */}
                         <div className="glass-card p-8 rounded-2xl flex items-start gap-4 hover:border-primary-500/30 transition-all group">
