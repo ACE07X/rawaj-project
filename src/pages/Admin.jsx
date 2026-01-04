@@ -110,6 +110,8 @@ const Admin = () => {
 
             const propertyData = {
                 ...newProperty,
+                price: parseFloat(newProperty.price) || 0,
+                size: newProperty.size ? parseFloat(newProperty.size) : null,
                 image_url: finalImageUrl
             };
 
