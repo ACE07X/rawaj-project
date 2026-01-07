@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useProperties } from '../context/PropertiesContext';
 import { Link, useSearchParams } from 'react-router-dom';
 import { MapPin, ArrowRight, Loader2, Home, Filter, Ruler, Building2 } from 'lucide-react';
+import ImageWithFallback from '../components/ImageWithFallback';
 
 const Properties = () => {
     const { t, lang } = useLanguage();
@@ -90,10 +91,11 @@ const Properties = () => {
                                         </span>
                                     )}
                                 </div>
-                                <img
+                                <ImageWithFallback
                                     src={property.image_url || 'https://images.unsplash.com/photo-1600596542815-60c37c65b567?q=80&w=800&auto=format&fit=crop'}
                                     alt={getLocalized(property.title_en, property.title_ar)}
                                     className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ${property.status === 'sold' ? 'grayscale opacity-80' : ''}`}
+                                    fallbackSrc="https://images.unsplash.com/photo-1600596542815-60c37c65b567?q=80&w=800&auto=format&fit=crop"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
 

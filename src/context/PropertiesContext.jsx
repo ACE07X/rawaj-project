@@ -10,17 +10,26 @@ export const PropertiesProvider = ({ children }) => {
 
     const fetchProperties = async () => {
         setLoading(true);
+        setError(null);
         try {
-            const { data, error } = await supabase
+            // Create a timeout promise
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Connection timed out. Please check your internet or try again later.')), 15000)
+            );
+
+            const fetchPromise = supabase
                 .from('properties')
                 .select('*')
                 .order('created_at', { ascending: false });
+
+            // Race between fetch and timeout
+            const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
 
             if (error) throw error;
             setProperties(data || []);
         } catch (err) {
             console.error('Error fetching properties:', err);
-            setError('Failed to load properties');
+            setError(err.message || 'Failed to load properties');
         } finally {
             setLoading(false);
         }
